@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Businka — Фотограф</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0a0a0a;
+      --bg2:     #111111;
+      --bg3:     #181818;
+      --accent:  #c8a96e;
+      --accent2: #e0c080;
+      --text:    #f0ece8;
+      --text2:   #6b6460;
+      --border:  #1e1e1e;
+      --radius:  10px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 100;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2.5rem;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.85) 100%),
+        linear-gradient(135deg, #1a1008 0%, #0d0d0d 50%, #080810 100%);
+    }
+    /* Декоративные плашки вместо реального фото */
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse 60% 80% at 65% 40%, rgba(200,169,110,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 20% 70%, rgba(200,169,110,0.04) 0%, transparent 50%);
+    }
+    /* Имитация фото — три перекрывающихся прямоугольника */
+    .hero-photos {
+      position: absolute;
+      right: 8%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 420px;
+      height: 520px;
+    }
+    .hero-photo-card {
+      position: absolute;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    }
+    .hero-photo-card:nth-child(1) {
+      width: 260px; height: 340px;
+      top: 0; right: 0;
+      background: linear-gradient(160deg, #2a1f10, #1a150c);
+      border: 1px solid rgba(200,169,110,0.15);
+      transform: rotate(2deg);
+    }
+    .hero-photo-card:nth-child(2) {
+      width: 240px; height: 310px;
+      top: 80px; right: 140px;
+      background: linear-gradient(160deg, #0f1520, #0a0d18);
+      border: 1px solid rgba(200,169,110,0.1);
+      transform: rotate(-1.5deg);
+    }
+    .hero-photo-card:nth-child(3) {
+      width: 200px; height: 260px;
+      top: 200px; right: 60px;
+      background: linear-gradient(160deg, #151515, #0f0f0f);
+      border: 1px solid rgba(200,169,110,0.08);
+      transform: rotate(1deg);
+    }
+    .hero-photo-label {
+      position: absolute;
+      bottom: 1rem; left: 1rem;
+      font-size: 0.7rem;
+      color: rgba(200,169,110,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .hero-content {
+      position: relative;
+      padding: 0 2.5rem 5rem;
+      max-width: 600px;
+    }
+    .hero-tag {
+      display: inline-block;
+      border: 1px solid rgba(200,169,110,0.35);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      margin-bottom: 1.2rem;
+      letter-spacing: -0.01em;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--text2);
+      max-width: 420px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.8rem;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.22s;
+    }
+    .btn-gold {
+      background: var(--accent);
+      color: #0a0a0a;
+    }
+    .btn-gold:hover { background: var(--accent2); transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    /* Счётчики под hero */
+    .hero-stats {
+      position: absolute;
+      bottom: 5rem; right: 8%;
+      display: flex;
+      gap: 2.5rem;
+      z-index: 2;
+    }
+    .hero-stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 0.72rem;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 0.2rem;
+    }
+
+    /* ── PORTFOLIO ── */
+    #portfolio { padding: 6rem 2.5rem; background: var(--bg); }
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .section-eyebrow {
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700;
+    }
+
+    /* Вкладки */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 0.55rem 1.5rem;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text2);
+      font-size: 0.85rem;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.04em;
+    }
+    .tab-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .tab-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0a0a0a;
+      font-weight: 500;
+    }
+
+    /* Masonry grid */
+    .masonry {
+      columns: 3;
+      column-gap: 12px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.25s;
+    }
+    .masonry-item:hover { transform: scale(1.015); }
+    .masonry-item:hover .masonry-overlay { opacity: 1; }
+    .masonry-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      opacity: 0;
+      transition: opacity 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .masonry-overlay svg {
+      width: 36px; height: 36px;
+      color: #fff;
+      opacity: 0.9;
+    }
+    .masonry-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 6px;
+    }
+    .hero-photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0.8;
+    }
+    .about-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: var(--radius);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── ABOUT ── */
+    #about {
+      padding: 6rem 2.5rem;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .about-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .about-photo-wrap {
+      position: relative;
+    }
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: linear-gradient(160deg, #1e1810, #111);
+      border-radius: var(--radius);
+      border: 1px solid rgba(200,169,110,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text2);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .about-photo-accent {
+      position: absolute;
+      bottom: -16px; right: -16px;
+      width: 60%; height: 60%;
+      border: 1px solid rgba(200,169,110,0.2);
+      border-radius: var(--radius);
+      z-index: -1;
+    }
+    .about-text .section-eyebrow { text-align: left; }
+    .about-text .section-title { text-align: left; margin-bottom: 1.2rem; }
+    .about-desc {
+      color: var(--text2);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+    .about-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .badge {
+      padding: 0.4rem 1rem;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: var(--text2);
+    }
+
+    /* ── CONTACT ── */
+    #contact { padding: 6rem 2.5rem; background: var(--bg); }
+    .contact-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .contact-inner .section-eyebrow,
+    .contact-inner .section-title { text-align: center; }
+    .contact-inner .section-title { margin-bottom: 1rem; }
+    .contact-desc {
+      color: var(--text2);
+      margin-bottom: 2.5rem;
+      font-size: 0.95rem;
+    }
+    .contact-links {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: all 0.2s;
+    }
+    .contact-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .contact-link svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text2);
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .masonry { columns: 2; }
+      .hero-photos { display: none; }
+      .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero-stats { display: none; }
+    }
+    @media (max-width: 600px) {
+      .masonry { columns: 1; }
+      .nav-links { display: none; }
+      .hero h1 { font-size: 2.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Bu<span>•</span>sinka</a>
+  <ul class="nav-links">
+    <li><a href="#portfolio">Портфолио</a></li>
+    <li><a href="#about">О себе</a></li>
+    <li><a href="#contact">Контакты</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <div class="hero-photos">
+    <div class="hero-photo-card">
+      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=520&fit=crop&crop=face" alt="Портрет">
+    </div>
+    <div class="hero-photo-card">
+      <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=480&fit=crop" alt="Мероприятие">
+    </div>
+    <div class="hero-photo-card">
+      <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=360&h=380&fit=crop" alt="Собака">
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-tag">Фотограф · Москва</div>
+    <h1>Ловлю<br>настоящие <em>моменты</em></h1>
+    <p class="hero-sub">
+      Портреты, собаки, мероприятия — снимаю живых людей
+      и животных такими, какие они есть: искренними.
+    </p>
+    <div class="hero-cta">
+      <a href="#portfolio" class="btn btn-gold">Смотреть работы</a>
+      <a href="#contact" class="btn btn-ghost">Заказать съёмку</a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div>
+      <div class="hero-stat-num">300+</div>
+      <div class="hero-stat-label">съёмок</div>
+    </div>
+    <div>
+      <div class="hero-stat-num">5</div>
+      <div class="hero-stat-label">лет опыта</div>
+    </div>
+    <div>
+      <div class="hero-stat-num">98%</div>
+      <div class="hero-stat-label">довольных клиентов</div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="section-header">
+    <div class="section-eyebrow">Работы</div>
+    <h2 class="section-title">Портфолио</h2>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="people">Люди</button>
+    <button class="tab-btn" data-tab="dogs">Собаки</button>
+    <button class="tab-btn" data-tab="events">Мероприятия</button>
+  </div>
+
+  <!-- Люди -->
+  <div class="tab-panel active" id="tab-people">
+    <div class="masonry" id="masonry-people"></div>
+  </div>
+
+  <!-- Собаки -->
+  <div class="tab-panel" id="tab-dogs">
+    <div class="masonry" id="masonry-dogs"></div>
+  </div>
+
+  <!-- Мероприятия -->
+  <div class="tab-panel" id="tab-events">
+    <div class="masonry" id="masonry-events"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-photo-wrap">
+      <div class="about-photo"><img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=500&h=667&fit=crop" alt="Фотограф"></div>
+      <div class="about-photo-accent"></div>
+    </div>
+    <div class="about-text">
+      <div class="section-eyebrow">О себе</div>
+      <h2 class="section-title">Привет, я Businka</h2>
+      <p class="about-desc">
+        Снимаю людей, собак и события с любовью к деталям и живому моменту.
+        Для меня фотография — это не постановка, а наблюдение: поймать взгляд,
+        движение, эмоцию — прежде чем они исчезнут.
+      </p>
+      <p class="about-desc">
+        Работаю в Москве и выезжаю на выездные съёмки.
+        Расскажи о своей идее — обсудим всё в Telegram или Instagram.
+      </p>
+      <div class="about-badges">
+        <span class="badge">Портреты</span>
+        <span class="badge">Собаки & питомцы</span>
+        <span class="badge">Мероприятия</span>
+        <span class="badge">Выездные съёмки</span>
+        <span class="badge">Обработка включена</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-eyebrow">Связаться</div>
+    <h2 class="section-title">Заказать съёмку</h2>
+    <p class="contact-desc">
+      Напиши в Telegram или Instagram — обсудим идею, дату и детали.
+    </p>
+    <div class="contact-links">
+      <a href="https://t.me/businka" target="_blank" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+        </svg>
+        Telegram
+      </a>
+      <a href="https://instagram.com/businka" target="_blank" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <circle cx="12" cy="12" r="4.5"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+        Instagram
+      </a>
+      <a href="tel:+79001234567" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.32 6.32l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+        Телефон
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Businka · Фотограф</p>
+</footer>
+
+<script>
+  // ── Tabs ──
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabPanels.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ── Stock photos from Unsplash ──
+  const photos = {
+    people: [
+      'photo-1534528741775-53994a69daeb?w=500&h=650&fit=crop&crop=face',
+      'photo-1506794778202-cad84cf45f1d?w=500&h=560&fit=crop&crop=face',
+      'photo-1531746020798-e6953c6e8e04?w=500&h=700&fit=crop&crop=face',
+      'photo-1517841905240-472988babdf9?w=500&h=580&fit=crop&crop=face',
+      'photo-1539571696357-5a69c17a67c6?w=500&h=620&fit=crop&crop=face',
+      'photo-1524504388940-b1c1722653e1?w=500&h=680&fit=crop&crop=face',
+      'photo-1488426862026-3ee34a7d66df?w=500&h=540&fit=crop&crop=face',
+      'photo-1507003211169-0a1dd7228f2d?w=500&h=600&fit=crop&crop=face',
+      'photo-1544005313-94ddf0286df2?w=500&h=650&fit=crop&crop=face',
+    ],
+    dogs: [
+      'photo-1587300003388-59208cc962cb?w=500&h=580&fit=crop',
+      'photo-1537151625747-768eb6cf92b2?w=500&h=500&fit=crop',
+      'photo-1583511655857-d19b40a7a54e?w=500&h=640&fit=crop',
+      'photo-1548199973-03cce0bbc87b?w=500&h=520&fit=crop',
+      'photo-1601979031925-424e53b6caaa?w=500&h=600&fit=crop',
+      'photo-1558788353-f76d92427f16?w=500&h=560&fit=crop',
+      'photo-1530281700549-e82e7bf110d6?w=500&h=480&fit=crop',
+    ],
+    events: [
+      'photo-1492684223066-81342ee5ff30?w=500&h=600&fit=crop',
+      'photo-1511795409834-ef04bbd61622?w=500&h=560&fit=crop',
+      'photo-1540575467063-178a50c2df87?w=500&h=520&fit=crop',
+      'photo-1529543544282-ea669407fca3?w=500&h=640&fit=crop',
+      'photo-1519741497674-611481863552?w=500&h=680&fit=crop',
+      'photo-1464366400600-7168b8af9bc3?w=500&h=500&fit=crop',
+      'photo-1470225620780-dba8ba36b745?w=500&h=580&fit=crop',
+      'photo-1501281668745-f7f57925c3b4?w=500&h=540&fit=crop',
+    ],
+  };
+
+  const BASE = 'https://images.unsplash.com/';
+
+  function buildMasonry(id, category) {
+    const grid = document.getElementById('masonry-' + id);
+    photos[category].forEach((slug, i) => {
+      const item = document.createElement('div');
+      item.className = 'masonry-item';
+      item.innerHTML = `
+        <img src="${BASE}${slug}" alt="">
+        <div class="masonry-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+          </svg>
+        </div>`;
+      grid.appendChild(item);
+    });
+  }
+
+  buildMasonry('people', 'people');
+  buildMasonry('dogs', 'dogs');
+  buildMasonry('events', 'events');
+</script>
+</body>
+</html>
