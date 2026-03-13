@@ -710,6 +710,23 @@
       setTimeout(() => el.classList.add('visible'), i * 150);
     });
   })();
+
+  // ── Scroll reveal ──
+  (function () {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const delay = el.dataset.delay ? parseInt(el.dataset.delay) : 0;
+        setTimeout(() => el.classList.add('visible'), delay);
+        observer.unobserve(el);
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.fade-up, .fade-left, .fade-right').forEach(el => {
+      observer.observe(el);
+    });
+  })();
 </script>
 </body>
 </html>
