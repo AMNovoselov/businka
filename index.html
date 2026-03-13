@@ -440,6 +440,44 @@
       .nav-links { display: none; }
       .hero h1 { font-size: 2.4rem; }
     }
+
+    /* ── ANIMATIONS ── */
+
+    .fade-up,
+    .fade-left,
+    .fade-right,
+    .stagger-item {
+      opacity: 0;
+      transition: opacity 1.0s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 1.0s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .fade-up    { transform: translateY(30px); }
+    .fade-left  { transform: translateX(-40px); }
+    .fade-right { transform: translateX(40px); }
+    .stagger-item { transform: translateY(24px); }
+
+    .fade-up.visible,
+    .fade-left.visible,
+    .fade-right.visible,
+    .stagger-item.visible {
+      opacity: 1;
+      transform: translate(0);
+    }
+
+    .hero-animate {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.0s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 1.0s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .hero-animate.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero-photo-card {
+      transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    }
   </style>
 </head>
 <body>
