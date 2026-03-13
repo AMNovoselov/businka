@@ -627,7 +627,6 @@
   // ── Tabs ──
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabPanels = document.querySelectorAll('.tab-panel');
-
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       tabBtns.forEach(b => b.classList.remove('active'));
@@ -637,50 +636,15 @@
     });
   });
 
-  // ── Stock photos from Unsplash ──
-  const photos = {
-    people: [
-      'photo-1534528741775-53994a69daeb?w=500&h=650&fit=crop&crop=face',
-      'photo-1506794778202-cad84cf45f1d?w=500&h=560&fit=crop&crop=face',
-      'photo-1531746020798-e6953c6e8e04?w=500&h=700&fit=crop&crop=face',
-      'photo-1517841905240-472988babdf9?w=500&h=580&fit=crop&crop=face',
-      'photo-1539571696357-5a69c17a67c6?w=500&h=620&fit=crop&crop=face',
-      'photo-1524504388940-b1c1722653e1?w=500&h=680&fit=crop&crop=face',
-      'photo-1488426862026-3ee34a7d66df?w=500&h=540&fit=crop&crop=face',
-      'photo-1507003211169-0a1dd7228f2d?w=500&h=600&fit=crop&crop=face',
-      'photo-1544005313-94ddf0286df2?w=500&h=650&fit=crop&crop=face',
-    ],
-    dogs: [
-      'photo-1587300003388-59208cc962cb?w=500&h=580&fit=crop',
-      'photo-1537151625747-768eb6cf92b2?w=500&h=500&fit=crop',
-      'photo-1583511655857-d19b40a7a54e?w=500&h=640&fit=crop',
-      'photo-1548199973-03cce0bbc87b?w=500&h=520&fit=crop',
-      'photo-1601979031925-424e53b6caaa?w=500&h=600&fit=crop',
-      'photo-1558788353-f76d92427f16?w=500&h=560&fit=crop',
-      'photo-1530281700549-e82e7bf110d6?w=500&h=480&fit=crop',
-    ],
-    events: [
-      'photo-1492684223066-81342ee5ff30?w=500&h=600&fit=crop',
-      'photo-1511795409834-ef04bbd61622?w=500&h=560&fit=crop',
-      'photo-1540575467063-178a50c2df87?w=500&h=520&fit=crop',
-      'photo-1529543544282-ea669407fca3?w=500&h=640&fit=crop',
-      'photo-1519741497674-611481863552?w=500&h=680&fit=crop',
-      'photo-1464366400600-7168b8af9bc3?w=500&h=500&fit=crop',
-      'photo-1470225620780-dba8ba36b745?w=500&h=580&fit=crop',
-      'photo-1501281668745-f7f57925c3b4?w=500&h=540&fit=crop',
-    ],
-  };
-
-  const BASE = 'https://images.unsplash.com/';
-
-  function buildMasonry(id, category) {
+  // ── Masonry builder (accepts array of full URLs) ──
+  function buildMasonry(id, photos) {
     const grid = document.getElementById('masonry-' + id);
-    photos[category].forEach((slug, i) => {
+    photos.forEach((url, i) => {
       const item = document.createElement('div');
       item.className = 'masonry-item stagger-item';
       item.dataset.delay = i * 60;
       item.innerHTML = `
-        <img src="${BASE}${slug}" alt="">
+        <img src="${url}" alt="">
         <div class="masonry-overlay">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
@@ -690,20 +654,11 @@
     });
   }
 
-  buildMasonry('people', 'people');
-  buildMasonry('dogs', 'dogs');
-  buildMasonry('events', 'events');
-
-  // ── Hero entrance sequence ──
-  (function () {
-    const items = document.querySelectorAll('.hero-animate');
-    items.forEach((el, i) => {
+  // ── Animations (called after content is injected) ──
+  function initAnimations() {
+    document.querySelectorAll('.hero-animate').forEach((el, i) => {
       setTimeout(() => el.classList.add('visible'), i * 150);
     });
-  })();
-
-  // ── Scroll reveal ──
-  (function () {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
@@ -713,37 +668,88 @@
         observer.unobserve(el);
       });
     }, { threshold: 0.15 });
-
     document.querySelectorAll('.fade-up, .fade-left, .fade-right, .stagger-item').forEach(el => {
       observer.observe(el);
     });
-  })();
+  }
 
   // ── Hero parallax ──
   (function () {
     const hero = document.querySelector('.hero');
     const cards = document.querySelectorAll('.hero-photo-card');
     const depths = [0.035, 0.02, 0.015];
-
     hero.addEventListener('mousemove', (e) => {
       const cx = hero.offsetWidth / 2;
       const cy = hero.offsetHeight / 2;
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
-
       cards.forEach((card, i) => {
         const x = dx * depths[i];
         const y = dy * depths[i];
         card.style.transform = card.style.transform.replace(/\s*translate\([^)]*\)/g, '') + ` translate(${x}px, ${y}px)`;
       });
     });
-
     hero.addEventListener('mouseleave', () => {
       cards.forEach(card => {
         card.style.transform = card.style.transform.replace(/\s*translate\([^)]*\)/g, '');
       });
     });
   })();
+
+  // ── Content initialiser ──
+  function initContent(data) {
+    // Text
+    document.getElementById('js-tagline').textContent        = data.tagline;
+    document.getElementById('js-hero-title').innerHTML       = data.hero_title_html;
+    document.getElementById('js-hero-sub').textContent       = data.hero_subtitle;
+    document.getElementById('js-about-name').textContent     = 'Привет, я ' + data.about_name;
+
+    // Stats
+    data.stats.forEach((s, i) => {
+      const v = document.getElementById('js-stat-' + i + '-val');
+      const l = document.getElementById('js-stat-' + i + '-lbl');
+      if (v) v.textContent = s.value;
+      if (l) l.textContent = s.label;
+    });
+
+    // Bio
+    data.about_bio.forEach((text, i) => {
+      const el = document.getElementById('js-bio-' + i);
+      if (el) el.textContent = text;
+    });
+
+    // Photos
+    data.hero_photos.forEach((url, i) => {
+      const img = document.getElementById('js-hero-img-' + i);
+      if (img) img.src = url;
+    });
+    const aboutImg = document.getElementById('js-about-img');
+    if (aboutImg) aboutImg.src = data.about_photo;
+
+    // Contacts
+    const tg    = document.getElementById('js-contact-tg');
+    const ig    = document.getElementById('js-contact-ig');
+    const phone = document.getElementById('js-contact-phone');
+    const lbl   = document.getElementById('js-phone-display');
+    if (tg)    tg.href    = data.contacts.telegram_url;
+    if (ig)    ig.href    = data.contacts.instagram_url;
+    if (phone) phone.href = data.contacts.phone_url;
+    if (lbl)   lbl.textContent = data.contacts.phone_display;
+
+    // Portfolio
+    buildMasonry('people', data.portfolio.people);
+    buildMasonry('dogs',   data.portfolio.dogs);
+    buildMasonry('events', data.portfolio.events);
+
+    // Start animations after content is ready
+    initAnimations();
+  }
+
+  // ── Bootstrap ──
+  fetch('content.json')
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(initContent)
+    .catch(err => console.error('content.json load failed:', err));
 </script>
 </body>
 </html>
