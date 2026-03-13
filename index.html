@@ -728,6 +728,32 @@
       observer.observe(el);
     });
   })();
+
+  // ── Hero parallax ──
+  (function () {
+    const hero = document.querySelector('.hero');
+    const cards = document.querySelectorAll('.hero-photo-card');
+    const depths = [0.035, 0.02, 0.015];
+
+    hero.addEventListener('mousemove', (e) => {
+      const cx = hero.offsetWidth / 2;
+      const cy = hero.offsetHeight / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+
+      cards.forEach((card, i) => {
+        const x = dx * depths[i];
+        const y = dy * depths[i];
+        card.style.transform = card.style.transform.replace(/\s*translate\([^)]*\)/g, '') + ` translate(${x}px, ${y}px)`;
+      });
+    });
+
+    hero.addEventListener('mouseleave', () => {
+      cards.forEach(card => {
+        card.style.transform = card.style.transform.replace(/\s*translate\([^)]*\)/g, '');
+      });
+    });
+  })();
 </script>
 </body>
 </html>
