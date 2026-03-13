@@ -498,23 +498,20 @@
 
   <div class="hero-photos">
     <div class="hero-photo-card">
-      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=520&fit=crop&crop=face" alt="Портрет">
+      <img id="js-hero-img-0" src="" alt="Портрет">
     </div>
     <div class="hero-photo-card">
-      <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=480&fit=crop" alt="Мероприятие">
+      <img id="js-hero-img-1" src="" alt="Мероприятие">
     </div>
     <div class="hero-photo-card">
-      <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=360&h=380&fit=crop" alt="Собака">
+      <img id="js-hero-img-2" src="" alt="Собака">
     </div>
   </div>
 
   <div class="hero-content">
-    <div class="hero-tag hero-animate">Фотограф · Москва</div>
-    <h1 class="hero-animate">Ловлю<br>настоящие <em>моменты</em></h1>
-    <p class="hero-sub hero-animate">
-      Портреты, собаки, мероприятия — снимаю живых людей
-      и животных такими, какие они есть: искренними.
-    </p>
+    <div class="hero-tag hero-animate" id="js-tagline"></div>
+    <h1 class="hero-animate" id="js-hero-title"></h1>
+    <p class="hero-sub hero-animate" id="js-hero-sub"></p>
     <div class="hero-cta hero-animate">
       <a href="#portfolio" class="btn btn-gold">Смотреть работы</a>
       <a href="#contact" class="btn btn-ghost">Заказать съёмку</a>
@@ -523,16 +520,16 @@
 
   <div class="hero-stats hero-animate">
     <div>
-      <div class="hero-stat-num">300+</div>
-      <div class="hero-stat-label">съёмок</div>
+      <div class="hero-stat-num" id="js-stat-0-val"></div>
+      <div class="hero-stat-label" id="js-stat-0-lbl"></div>
     </div>
     <div>
-      <div class="hero-stat-num">5</div>
-      <div class="hero-stat-label">лет опыта</div>
+      <div class="hero-stat-num" id="js-stat-1-val"></div>
+      <div class="hero-stat-label" id="js-stat-1-lbl"></div>
     </div>
     <div>
-      <div class="hero-stat-num">98%</div>
-      <div class="hero-stat-label">довольных клиентов</div>
+      <div class="hero-stat-num" id="js-stat-2-val"></div>
+      <div class="hero-stat-label" id="js-stat-2-lbl"></div>
     </div>
   </div>
 </section>
@@ -570,21 +567,14 @@
 <section id="about">
   <div class="about-inner">
     <div class="about-photo-wrap fade-left">
-      <div class="about-photo"><img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=500&h=667&fit=crop" alt="Фотограф"></div>
+      <div class="about-photo"><img id="js-about-img" src="" alt="Фотограф"></div>
       <div class="about-photo-accent"></div>
     </div>
     <div class="about-text fade-right">
       <div class="section-eyebrow">О себе</div>
-      <h2 class="section-title">Привет, я Businka</h2>
-      <p class="about-desc">
-        Снимаю людей, собак и события с любовью к деталям и живому моменту.
-        Для меня фотография — это не постановка, а наблюдение: поймать взгляд,
-        движение, эмоцию — прежде чем они исчезнут.
-      </p>
-      <p class="about-desc">
-        Работаю в Москве и выезжаю на выездные съёмки.
-        Расскажи о своей идее — обсудим всё в Telegram или Instagram.
-      </p>
+      <h2 class="section-title" id="js-about-name"></h2>
+      <p class="about-desc" id="js-bio-0"></p>
+      <p class="about-desc" id="js-bio-1"></p>
       <div class="about-badges">
         <span class="badge">Портреты</span>
         <span class="badge">Собаки & питомцы</span>
@@ -605,13 +595,13 @@
       Напиши в Telegram или Instagram — обсудим идею, дату и детали.
     </p>
     <div class="contact-links">
-      <a href="https://t.me/businka" target="_blank" class="contact-link">
+      <a id="js-contact-tg" href="#" target="_blank" class="contact-link">
         <svg viewBox="0 0 24 24" fill="currentColor">
           <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
         </svg>
         Telegram
       </a>
-      <a href="https://instagram.com/businka" target="_blank" class="contact-link">
+      <a id="js-contact-ig" href="#" target="_blank" class="contact-link">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <rect x="2" y="2" width="20" height="20" rx="5"/>
           <circle cx="12" cy="12" r="4.5"/>
@@ -619,11 +609,11 @@
         </svg>
         Instagram
       </a>
-      <a href="tel:+79001234567" class="contact-link">
+      <a id="js-contact-phone" href="#" class="contact-link">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.32 6.32l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
         </svg>
-        Телефон
+        <span id="js-phone-display">Телефон</span>
       </a>
     </div>
   </div>
