@@ -687,7 +687,8 @@
     const grid = document.getElementById('masonry-' + id);
     photos[category].forEach((slug, i) => {
       const item = document.createElement('div');
-      item.className = 'masonry-item';
+      item.className = 'masonry-item stagger-item';
+      item.dataset.delay = i * 60;
       item.innerHTML = `
         <img src="${BASE}${slug}" alt="">
         <div class="masonry-overlay">
@@ -723,7 +724,7 @@
       });
     }, { threshold: 0.15 });
 
-    document.querySelectorAll('.fade-up, .fade-left, .fade-right').forEach(el => {
+    document.querySelectorAll('.fade-up, .fade-left, .fade-right, .stagger-item').forEach(el => {
       observer.observe(el);
     });
   })();
