@@ -3,20 +3,29 @@
   "hero_title_html": "Ловлю<br>настоящие <em>моменты</em>",
   "hero_subtitle": "Портреты, собаки, мероприятия — снимаю живых людей и животных такими, какие они есть: искренними.",
   "stats": [
-    { "value": "300+", "label": "съёмок" },
-    { "value": "5",    "label": "лет опыта" },
-    { "value": "98%",  "label": "довольных клиентов" }
+    {
+      "value": "300+",
+      "label": "съёмок"
+    },
+    {
+      "value": "5",
+      "label": "лет опыта"
+    },
+    {
+      "value": "98%",
+      "label": "довольных клиентов"
+    }
   ],
-  "about_name": "Businka",
+  "about_name": "Marina Noyer",
   "about_bio": [
     "Снимаю людей, собак и события с любовью к деталям и живому моменту. Для меня фотография — это не постановка, а наблюдение: поймать взгляд, движение, эмоцию — прежде чем они исчезнут.",
     "Работаю в Москве и выезжаю на выездные съёмки. Расскажи о своей идее — обсудим всё в Telegram или Instagram."
   ],
   "contacts": {
-    "telegram_url":   "https://t.me/businka",
-    "instagram_url":  "https://instagram.com/businka",
-    "phone_url":      "tel:+79001234567",
-    "phone_display":  "+7 900 123 45 67"
+    "telegram_url": "https://t.me/chilly_sins",
+    "instagram_url": "https://instagram.com/businka",
+    "phone_url": "tel:+79001234567",
+    "phone_display": "+7 900 123 45 67"
   },
   "about_photo": "https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=500&h=667&fit=crop",
   "hero_photos": [
