@@ -422,8 +422,9 @@
       setTimeout(() => { status.textContent = ''; }, 6000);
     } catch (e) {
       status.textContent = '✗ Ошибка: ' + e.message;
+    } finally {
+      btn.disabled = false;
     }
-    btn.disabled = false;
   });
 
   document.querySelectorAll('.admin-tab-btn').forEach(btn => {
