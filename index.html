@@ -702,6 +702,14 @@
   buildMasonry('people', 'people');
   buildMasonry('dogs', 'dogs');
   buildMasonry('events', 'events');
+
+  // ── Hero entrance sequence ──
+  (function () {
+    const items = document.querySelectorAll('.hero-animate');
+    items.forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), i * 150);
+    });
+  })();
 </script>
 </body>
 </html>
