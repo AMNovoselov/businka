@@ -166,6 +166,7 @@
   <nav class="admin-tabs">
     <button class="admin-tab-btn active" data-panel="text">📝 Текст</button>
     <button class="admin-tab-btn" data-panel="portfolio">🖼 Портфолио</button>
+    <button class="admin-tab-btn" data-panel="settings">⚙️ Настройки</button>
   </nav>
 
   <!-- TEXT TAB -->
@@ -252,6 +253,31 @@
     </div>
   </div>
 
+  <!-- SETTINGS TAB -->
+  <div class="admin-panel" id="panel-settings">
+    <div class="form-section">
+      <h2>Смена пароля</h2>
+      <div class="form-grid full" style="max-width:400px">
+        <div class="field">
+          <label>Текущий пароль</label>
+          <input type="password" id="f-pwd-current" autocomplete="current-password" placeholder="••••••••">
+        </div>
+        <div class="field">
+          <label>Новый пароль</label>
+          <input type="password" id="f-pwd-new" autocomplete="new-password" placeholder="••••••••">
+        </div>
+        <div class="field">
+          <label>Повторите новый пароль</label>
+          <input type="password" id="f-pwd-confirm" autocomplete="new-password" placeholder="••••••••">
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+          <button class="btn btn-gold" id="btn-change-pwd">Сменить пароль</button>
+          <span class="save-status" id="pwd-status"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- PORTFOLIO TAB -->
   <div class="admin-panel" id="panel-portfolio">
     <div class="cat-tabs">
@@ -270,9 +296,10 @@
 </div>
 
 <script>
-  const REPO          = 'AMNovoselov/businka';
-  const GH_API        = 'https://api.github.com';
-  const PASSWORD_HASH = '075876fc1ddbc1476bd696f56742629c422d0b3a9bebb840401e2d6a3b2d389c';
+  const REPO           = 'AMNovoselov/businka';
+  const GH_API         = 'https://api.github.com';
+  const ADMIN_FILENAME = location.pathname.split('/').pop();
+  let currentPasswordHash = '075876fc1ddbc1476bd696f56742629c422d0b3a9bebb840401e2d6a3b2d389c';
 
   let token       = '';
   let contentData = null;
@@ -321,7 +348,7 @@
   document.getElementById('btn-check-password').addEventListener('click', async () => {
     const pwd = document.getElementById('input-password').value;
     const hash = await sha256(pwd);
-    if (hash !== PASSWORD_HASH) {
+    if (hash !== currentPasswordHash) {
       document.getElementById('password-error').textContent = 'Неверный пароль';
       return;
     }
@@ -510,6 +537,44 @@
       reader.readAsDataURL(blob);
     });
   }
+
+  document.getElementById('btn-change-pwd').addEventListener('click', async () => {
+    const btn    = document.getElementById('btn-change-pwd');
+    const status = document.getElementById('pwd-status');
+    const curr   = document.getElementById('f-pwd-current').value;
+    const next   = document.getElementById('f-pwd-new').value;
+    const conf   = document.getElementById('f-pwd-confirm').value;
+
+    if (!curr || !next || !conf) { status.textContent = '✗ Заполните все поля'; return; }
+    if (next !== conf)            { status.textContent = '✗ Новые пароли не совпадают'; return; }
+    if (next.length < 8)          { status.textContent = '✗ Пароль должен быть не менее 8 символов'; return; }
+
+    const currHash = await sha256(curr);
+    if (currHash !== currentPasswordHash) { status.textContent = '✗ Неверный текущий пароль'; return; }
+
+    const newHash = await sha256(next);
+    btn.disabled = true;
+    status.textContent = 'Обновляю...';
+    try {
+      const adminFile = await ghGet('/repos/' + REPO + '/contents/' + ADMIN_FILENAME);
+      const html      = fromB64(adminFile.content).replace(currentPasswordHash, newHash);
+      await ghPut('/repos/' + REPO + '/contents/' + ADMIN_FILENAME, {
+        message: 'admin: change password hash',
+        content: toB64(html),
+        sha:     adminFile.sha,
+      });
+      currentPasswordHash = newHash;
+      document.getElementById('f-pwd-current').value = '';
+      document.getElementById('f-pwd-new').value     = '';
+      document.getElementById('f-pwd-confirm').value = '';
+      status.textContent = '✓ Пароль успешно изменён';
+      setTimeout(() => { status.textContent = ''; }, 6000);
+    } catch (e) {
+      status.textContent = '✗ Ошибка: ' + e.message;
+    } finally {
+      btn.disabled = false;
+    }
+  });
 
   async function uploadPhoto(file, cat) {
     const status = document.getElementById('upload-status');
