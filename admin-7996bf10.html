@@ -214,10 +214,27 @@
   <header class="admin-header">
     <h1>Bu<span>•</span>sinka Admin</h1>
     <div class="save-area">
+      <button class="burger-btn" id="btn-burger" aria-label="Меню">☰</button>
       <span class="save-status" id="save-status"></span>
       <button class="btn btn-gold" id="btn-save">💾 Сохранить</button>
     </div>
   </header>
+
+  <!-- Drawer overlay -->
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+
+  <!-- Drawer -->
+  <nav class="drawer" id="drawer">
+    <div class="drawer-header">
+      <span>Меню</span>
+      <button class="drawer-close" id="btn-drawer-close" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="drawer-nav">
+      <button class="drawer-btn active" data-panel="text">📝 Текст</button>
+      <button class="drawer-btn" data-panel="portfolio">🖼 Портфолио</button>
+      <button class="drawer-btn" data-panel="settings">⚙️ Настройки</button>
+    </div>
+  </nav>
 
   <nav class="admin-tabs">
     <button class="admin-tab-btn active" data-panel="text">📝 Текст</button>
