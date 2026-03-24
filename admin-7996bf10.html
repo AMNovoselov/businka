@@ -527,14 +527,43 @@
     }
   });
 
+  function switchTab(panel) {
+    document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.drawer-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+    const activeTab    = document.querySelector('.admin-tab-btn[data-panel="' + panel + '"]');
+    const activeDrawer = document.querySelector('.drawer-btn[data-panel="' + panel + '"]');
+    if (activeTab)    activeTab.classList.add('active');
+    if (activeDrawer) activeDrawer.classList.add('active');
+    document.getElementById('panel-' + panel).classList.add('active');
+  }
+
   document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.panel));
+  });
+
+  document.querySelectorAll('.drawer-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      switchTab(btn.dataset.panel);
+      closeDrawer();
     });
   });
+
+  function openDrawer() {
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('drawer-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawer-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('btn-burger').addEventListener('click', openDrawer);
+  document.getElementById('btn-drawer-close').addEventListener('click', closeDrawer);
+  document.getElementById('drawer-overlay').addEventListener('click', closeDrawer);
 
   document.querySelectorAll('.cat-btn').forEach(btn => {
     btn.addEventListener('click', () => {
